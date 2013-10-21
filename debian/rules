@@ -14,4 +14,4 @@
 
 override_dh_auto_install:
 	dh_installdirs
-	install backdoor.py $CURDIR)/debian/backdoor-factory/usr/bin/backdoor-factory
+	install backdoor.py $(CURDIR)/debian/backdoor-factory/usr/bin/backdoor-factory
