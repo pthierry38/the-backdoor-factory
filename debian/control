@@ -1,15 +1,20 @@
 Source: backdoor-factory
-Section: unknown
+Section: utils
 Priority: extra
 Maintainer: Devon Kearns <dookie@kali.org>
 Build-Depends: debhelper (>= 8.0.0)
 Standards-Version: 3.9.3
-Homepage: <insert the upstream URL, if relevant>
-#Vcs-Git: git://git.debian.org/collab-maint/backdoor-factory.git
-#Vcs-Browser: http://git.debian.org/?p=collab-maint/backdoor-factory.git;a=summary
+Homepage: https://github.com/secretsquirrel/the-backdoor-factory
+Vcs-Git: ssh://git@git.kali.org/packages/backdoor-factory.git
+Vcs-Browser: http://git.kali.org/gitweb?p=collab-maint/backdoor-factory.git;a=summary
 
 Package: backdoor-factory
 Architecture: all
-Depends: ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Depends: ${misc:Depends}, python
+Description: Patch win32/64 binaries with shellcode
+ Injects shellcode into win32/64 PE files, to continue normal file execution (if 
+ the shellcode supports it), by patching the exe/dll directly.
+ .
+ Some executables have built in protections, as such this will not work on all 
+ PE files. It is advisable that you test target PE files before deploying them 
+ to clients or using them in exercises

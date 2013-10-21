@@ -1,5 +1,5 @@
-backdoor-factory (1.0+git20131021-1) unstable; urgency=low
+backdoor-factory (1.0+git20131021-1kali0) kali; urgency=low
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+  * Initial release (Closes: 0000655)  
 
  -- Devon Kearns <dookie@kali.org>  Mon, 21 Oct 2013 11:25:07 -0600
