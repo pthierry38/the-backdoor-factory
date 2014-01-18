@@ -1,3 +1,9 @@
+backdoor-factory (1.0+git20140118) kali; urgency=low
+
+  * Update from upstream
+
+ -- Mati Aharoni <muts@kali.org>  Sat, 18 Jan 2014 09:46:58 -0500
+
 backdoor-factory (1.0+git20131021-1kali0) kali; urgency=low
 
   * Initial release (Closes: 0000655)  
