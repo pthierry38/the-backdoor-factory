@@ -1,3 +1,9 @@
+backdoor-factory (2.0.6-0kali1) kali; urgency=low
+
+  * Imported new upstream release (Closes: 0001035)
+
+ -- Devon Kearns <dookie@kali.org>  Mon, 17 Feb 2014 10:30:41 -0700
+
 backdoor-factory (1.0+git20140118) kali; urgency=low
 
   * Update from upstream

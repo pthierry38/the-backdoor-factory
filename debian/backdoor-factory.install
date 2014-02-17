@@ -1,0 +1,3 @@
+*.py usr/share/backdoor-factory/
+intel usr/share/backdoor-factory/
+debian/helper-script/* usr/bin/
