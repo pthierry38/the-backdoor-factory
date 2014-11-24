@@ -2,10 +2,10 @@ Source: backdoor-factory
 Section: utils
 Priority: extra
 Maintainer: Devon Kearns <dookie@kali.org>
-Build-Depends: debhelper (>= 8.0.0)
-Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.6
 Homepage: https://github.com/secretsquirrel/the-backdoor-factory
-Vcs-Git: ssh://git@git.kali.org/packages/backdoor-factory.git
+Vcs-Git: git://git.kali.org/packages/backdoor-factory.git
 Vcs-Browser: http://git.kali.org/gitweb?p=collab-maint/backdoor-factory.git;a=summary
 
 Package: backdoor-factory

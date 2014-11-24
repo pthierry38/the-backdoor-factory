@@ -1,3 +1,9 @@
+backdoor-factory (2.2.0-0kali1) kali; urgency=medium
+
+  * Import new upstream release
+
+ -- Sophie Brun <sophie@freexian.com>  Mon, 24 Nov 2014 15:49:36 +0100
+
 backdoor-factory (2.0.6-0kali1) kali; urgency=low
 
   * Imported new upstream release (Closes: 0001035)

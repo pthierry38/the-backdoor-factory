@@ -3,7 +3,7 @@ Upstream-Name: backdoor-factory
 Source: https://github.com/secretsquirrel/the-backdoor-factory
 
 Files: *
-Copyright: Joshua Pitts <the.midnite.runr@gmail.com>
+Copyright: 2013-2014 Joshua Pitts <the.midnite.runr@gmail.com>
 License: GPL-3+
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
