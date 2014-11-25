@@ -1,6 +1,9 @@
-backdoor-factory (2.2.0-0kali1) kali; urgency=medium
+backdoor-factory (2.2.0+20141124-0kali1) kali; urgency=medium
 
   * Import new upstream release
+  * Add depends: libcapstone3, python-capstone (>= 3) and python-pefile
+  * Change license according to upstream
+  * Add install new directories and files
 
  -- Sophie Brun <sophie@freexian.com>  Mon, 24 Nov 2014 15:49:36 +0100
 
