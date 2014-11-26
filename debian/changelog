@@ -1,3 +1,9 @@
+backdoor-factory (2.2.0+20141124-0kali2) kali; urgency=medium
+
+  * Remove depends libcapstone3
+
+ -- Sophie Brun <sophie@freexian.com>  Wed, 26 Nov 2014 10:54:50 +0100
+
 backdoor-factory (2.2.0+20141124-0kali1) kali; urgency=medium
 
   * Import new upstream release
