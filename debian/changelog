@@ -1,3 +1,9 @@
+backdoor-factory (2.3.2-0kali1) kali; urgency=low
+
+  * Upstream update
+
+ -- Mati Aharoni <muts@kali.org>  Wed, 24 Dec 2014 10:59:25 -0500
+
 backdoor-factory (2.2.0+20141124-0kali2) kali; urgency=medium
 
   * Remove depends libcapstone3
