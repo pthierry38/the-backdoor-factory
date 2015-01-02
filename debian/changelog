@@ -1,3 +1,9 @@
+backdoor-factory (2.3.8-0kali1) kali; urgency=low
+
+  * Upstream update
+
+ -- Mati Aharoni <muts@kali.org>  Fri, 02 Jan 2015 06:25:41 -0500
+
 backdoor-factory (2.3.6-0kali1) kali; urgency=low
 
   * Upstream update
