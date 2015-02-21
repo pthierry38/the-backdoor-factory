@@ -3,3 +3,4 @@ intel usr/share/backdoor-factory/
 arm usr/share/backdoor-factory/
 asm usr/share/backdoor-factory/
 debian/helper-script/* usr/bin/
+winapi usr/share/backdoor-factory/
