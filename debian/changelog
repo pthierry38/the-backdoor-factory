@@ -1,3 +1,9 @@
+backdoor-factory (3.0.2-1kali1) kali; urgency=low
+
+  * Upstream update
+
+ -- Mati Aharoni <muts@kali.org>  Thu, 30 Apr 2015 15:43:49 -0400
+
 backdoor-factory (2.4.1-0kali2) kali; urgency=low
 
   * Include the winapi directory
