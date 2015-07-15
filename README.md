@@ -1,9 +1,11 @@
 
 ##The Backdoor Factory (BDF)
+
+#### YOU MUST BE *THIS* TALL TO RIDE THIS RIDE
+
 For security professionals and researchers only.
 
 The goal of BDF is to patch executable binaries with user desired shellcode and continue normal execution of the prepatched state.
-
 
 
 
@@ -220,6 +222,15 @@ Sample Usage:
 ---
 
 ###Changelog
+
+####7/06/2015
+
+    * Clean exit if text section name is mangled or out of order.
+
+
+####5/01/2015
+
+    * Bug fix to the reverse_tcp_stager_threaded payload when using single caves payload
 
 ####4/28/2015
 
