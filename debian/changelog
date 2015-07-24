@@ -1,3 +1,9 @@
+backdoor-factory (3.0.5-0kali1) kali-dev; urgency=medium
+
+  * Import new upstream release
+
+ -- Sophie Brun <sophie@freexian.com>  Fri, 24 Jul 2015 11:39:57 +0200
+
 backdoor-factory (3.0.4-0kali1) kali-dev; urgency=medium
 
   * Import new upstream release
