@@ -10,7 +10,12 @@ Vcs-Browser: http://git.kali.org/gitweb?p=collab-maint/backdoor-factory.git;a=su
 
 Package: backdoor-factory
 Architecture: all
-Depends: ${misc:Depends}, python, python-capstone (>= 3.0), python-pefile
+Depends: ${misc:Depends},
+         python,
+         python-capstone (>= 3.0),
+         python-pefile,
+#        can be removed when debian bug 797870 is fixed:
+         libcapstone3
 Description: Patch win32/64 binaries with shellcode
  Injects shellcode into win32/64 PE files, to continue normal file execution (if 
  the shellcode supports it), by patching the exe/dll directly.
