@@ -4,6 +4,12 @@ For security professionals and researchers only.
 
 The goal of BDF is to patch executable binaries with user desired shellcode and continue normal execution of the prepatched state.
 
+Black Hat USA 2015:
+
+    Video: https://www.youtube.com/watch?v=OuyLzkG16Uk
+    
+    Paper: https://www.blackhat.com/docs/us-15/materials/us-15-Pitts-Repurposing-OnionDuke-A-Single-Case-Study-Around-Reusing-Nation-State-Malware-wp.pdf
+
 
 Shmoocon 2015:
     
@@ -223,6 +229,10 @@ Sample Usage:
 
 ###Changelog
 
+####10/13/2015
+   * Changed the Import Table Directory modifications from adding a new section to using an existing code cave
+
+
 ####08/12/2015
    * Added 'replace' PATCH_METHOD - a straight PE copy pasta of the supplied binary
    * More for usage with BDFProxy
@@ -364,4 +374,3 @@ Added a new win86 shellcode: loadliba_reverse_tcp
   - As such, I'll be furthering this idea with an algo that patches the binary with custom shellcode based on the APIs that are in the IAT. Including porting the current win86 shellcodes to this idea.
 
 ---
-
