@@ -1,3 +1,11 @@
+backdoor-factory (3.2.0-0kali1) kali-dev; urgency=medium
+
+  * Import new upstream release
+  * Drop depends on libcapstone3 (bug # 797870 is fixed)
+  * Update dates in debian/copyright
+
+ -- Sophie Brun <sophie@freexian.com>  Fri, 16 Oct 2015 14:26:39 +0200
+
 backdoor-factory (3.1.3-0kali1) kali-dev; urgency=medium
 
   * Import new upstream release
