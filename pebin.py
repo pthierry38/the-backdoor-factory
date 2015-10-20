@@ -92,7 +92,7 @@ class pebin():
                  INJECTOR=False, CHANGE_ACCESS=True, VERBOSE=False, SUPPORT_CHECK=False,
                  SHELL_LEN=300, FIND_CAVES=False, SUFFIX=".old", DELETE_ORIGINAL=False, CAVE_MINER=False,
                  IMAGE_TYPE="ALL", ZERO_CERT=True, RUNAS_ADMIN=False, PATCH_DLL=True, PATCH_METHOD="MANUAL",
-                 SUPPLIED_BINARY=None, XP_MODE=False):
+                 SUPPLIED_BINARY=None, XP_MODE=False, IDT_IN_CAVE=False):
         self.FILE = FILE
         self.OUTPUT = OUTPUT
         self.SHELL = SHELL
@@ -121,6 +121,7 @@ class pebin():
         self.flItms = {}
         self.iat_cave_loc = 0
         self.SUPPLIED_BINARY = SUPPLIED_BINARY
+        self.flItms['IDT_IN_CAVE'] = IDT_IN_CAVE
         if self.PATCH_METHOD.lower() == 'automatic':
             self.CAVE_JUMPING = True
             self.ADD_SECTION = False
@@ -708,8 +709,6 @@ class pebin():
             self.build_imports()
             #and remove here
 
-            print "len(self.flItms['addedIAT'])", len(self.flItms['addedIAT'])
-
             self.binary.write(self.flItms['addedIAT'])
             self.binary.write(struct.pack("<B", 0x0) * (self.flItms['NewSectionSize'] -
                               len(self.flItms['addedIAT']) - len(self.flItms['Import_Directory_Table']) + 20))
@@ -717,7 +716,6 @@ class pebin():
             self.binary.write(struct.pack('<I', self.flItms['SizeOfImage']))
             self.binary.write(struct.pack("<I", (self.flItms['ImportTableSize']) + self.flItms['apiCount'] * 8 + 20))
             self.binary.seek(0)
-            print "new IAT size:", self.flItms['ImportTableSize'] + self.flItms['apiCount'] * 8 + 20
             #For trimming File of cert (if there)
 
         #get file data again
@@ -960,12 +958,13 @@ class pebin():
             # Take away the rsrc restriction, solved
             for caveNumber, caveValues in pickACave.iteritems():
                 # caveValues[0], Begin Cave, [1] End of Cave
-                # stay clear of iat_cave_loc starting
-                if caveValues[0] <= self.iat_cave_loc[0] <= caveValues[1]:
-                    continue
+                # stay clear of iat_cave_loc, will be zero if never touched
+                if self.iat_cave_loc != 0:
+                    if caveValues[0] <= self.iat_cave_loc[0] <= caveValues[1]:
+                        continue
                 # stay clear of iat_cave_loc ending
-                if caveValues[0] <= self.iat_cave_loc[1] <= caveValues[1]:
-                    continue
+                    if caveValues[0] <= self.iat_cave_loc[1] <= caveValues[1]:
+                        continue
                 if caveValues[0] is None:
                     continue
                 elif caveValues[3] >= 50:
@@ -1590,16 +1589,16 @@ class pebin():
 
         if 'apis_needed' in self.flItms:
             self.check_apis(self.FILE)
+            iat_result = ''
             if "UPX".lower() in self.flItms['textSectionName'].lower():
                 print "[!] Cannot patch a new IAT into a UPX binary at this time."
                 return False
-            if self.flItms['neededAPIs'] != set():
+            if self.flItms['neededAPIs'] != set() and self.flItms['IDT_IN_CAVE'] is True:
                 iat_result = self.patch_in_new_iat()
                 print "[*] Checking updated IAT for thunks"
                 self.check_apis(self.flItms['backdoorfile'])
             if iat_result is False or self.flItms['neededAPIs'] != set():
                 #reset the file
-                print "[!] Patching Import Directory in code cave failed"
                 shutil.copy2(self.FILE, self.flItms['backdoorfile'])
                 iat_result = self.create_new_iat()
                 if iat_result is False:
