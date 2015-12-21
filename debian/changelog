@@ -1,3 +1,10 @@
+backdoor-factory (3.3.1-0kali1) kali-dev; urgency=medium
+
+  * Import new upstream release
+  * Drop the patch for pe signing (included upstream)
+
+ -- Sophie Brun <sophie@freexian.com>  Mon, 21 Dec 2015 11:20:08 +0100
+
 backdoor-factory (3.2.4-0kali2) kali-dev; urgency=medium
 
   * Add pe code signing: add a depends on osslsigncode and patch pebin.py
