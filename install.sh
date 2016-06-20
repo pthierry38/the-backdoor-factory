@@ -4,6 +4,7 @@
 # capstone (newest)
 # pefile
 # python-capstone
+# autoconf
 
 
 if [[ $EUID -ne 0 ]]; then
@@ -15,7 +16,7 @@ fi
 uname -a | grep -i kali &> /dev/null 
 if [ $? -eq 0 ]; then
 	apt-get update
-	apt-get install -y python-capstone 
+	apt-get install -y python-capstone autoconf libtool curl libcurl4-openssl-dev
 
 	echo '[*] Install osslsigncode'
     cd osslsigncode
@@ -44,7 +45,7 @@ uname -a | grep -v "kali" | grep -i linux &> /dev/null
 if [ $? -eq 0 ]; then
 
 	if hash pip 2>/dev/null; then
-		sudo apt-get install -y python-pip
+		sudo apt-get install -y python-pip autoconf libtool curl libcurl4-openssl-dev
 	        pip install pefile
 	        #install capstone
 		pip install capstone
@@ -79,12 +80,17 @@ fi
 #OS X appack install
 uname -a | grep -i Darwin &> /dev/null
 if [ $? -eq 0 ]; then
+	brew install autoconf
+	brew install automake
+	brew install libtool
+	
 	pip install pefile
-
+	pip install capstone
+	
 	echo '[*] Install osslsigncode'
-    cd osslsigncode
-    ./autogen.sh
-    ./configure
+    	cd osslsigncode
+    	./autogen.sh
+    	./configure
 	make
 	make install
     cd ..	
@@ -92,6 +98,6 @@ if [ $? -eq 0 ]; then
 	cd ./aPLib/example/
 	clang -c -I../lib/macho64 -Wall -O2  -o appack.o appack.c -v 
 	clang -Wall -O2  -o appack appack.o ../lib/macho64/aplib.a -v 
-	cp ./appack /usr/bin/appack
+	cp ./appack /usr/local/bin/appack
 fi
 
