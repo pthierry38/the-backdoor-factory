@@ -46,8 +46,18 @@ Under a BSD 3 Clause License
 See the wiki: https://github.com/secretsquirrel/the-backdoor-factory/wiki
 
 ---
+## Installing
 
-###Dependences
+### DOCKER
+```
+docker pull secretsquirrel/the-backdoor-factory
+docker run -it secretsquirrel/the-backdoor-factory bash
+# ./backdoor.py
+```
+
+###OLD SCHOOL
+
+####Dependences
 #####*To use OnionDuke you MUST be on an intel machine because aPLib has no support for the ARM chipset yet.*
 
 
@@ -265,6 +275,14 @@ On successful run you should see this line in BDF output:
 ---
 
 ###Changelog
+
+####06/19/2016
+
+* Added the preprocessor and other optimizations
+* The preprocessor allows the user to modify the binary prior to payload injection
+* Invoke with the -p flag
+* See samples in ./preprocessor/
+
 
 ####12/20/2015
 

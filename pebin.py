@@ -452,8 +452,10 @@ class pebin():
     def preprocess(self):
         # files in directory
         ignore = ['__init__.py']
-
-        for afile in os.listdir("./preprocessor"):
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        sys.path.append(dname)
+        for afile in os.listdir(dname + "/preprocessor"):
             if afile in ignore:
                 continue
             if ".pyc" in afile:
