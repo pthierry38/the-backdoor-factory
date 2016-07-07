@@ -35,6 +35,7 @@ POSSIBILITY OF SUCH DAMAGE.
 import struct
 import os
 import shutil
+import sys
 import tempfile
 from intel.LinuxIntelELF32 import linux_elfI32_shellcode
 from intel.LinuxIntelELF64 import linux_elfI64_shellcode
@@ -255,8 +256,10 @@ class elfbin():
     def preprocess(self):
         # files in directory
         ignore = ['__init__.py']
-
-        for afile in os.listdir("./preprocessor"):
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        sys.path.append(dname)
+        for afile in os.listdir(dname + "/preprocessor"):
             if afile in ignore:
                 continue
             if ".pyc" in afile:
