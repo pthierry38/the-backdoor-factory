@@ -1,8 +1,13 @@
 
 ##The Backdoor Factory (BDF)
+
 For security professionals and researchers only.
 
+
+
 The goal of BDF is to patch executable binaries with user desired shellcode and continue normal execution of the prepatched state.
+
+[![Join the chat at https://gitter.im/secretsquirrel/the-backdoor-factory](https://badges.gitter.im/secretsquirrel/the-backdoor-factory.svg)](https://gitter.im/secretsquirrel/the-backdoor-factory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  [![Black Hat Arsenal](https://www.toolswatch.org/badges/arsenal/2015.svg)](https://www.blackhat.com/us-15/arsenal.html)
 
 Black Hat USA 2015:
 
@@ -275,6 +280,15 @@ On successful run you should see this line in BDF output:
 ---
 
 ###Changelog
+
+####01/11/2016
+
+* Fix entry point truncation bug that led to improper recovery in rare instances
+
+
+####07/04/2016
+
+* Support for dynamic paths in BDFProxy for preprocessor
 
 ####06/19/2016
 
