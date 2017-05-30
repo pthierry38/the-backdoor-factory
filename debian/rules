@@ -21,8 +21,8 @@ override_dh_auto_test:
 override_dh_auto_install:
 	dh_auto_install -- -Dosslsigncode
 
-override_dh_auto_clean:
-	dh_auto_clean -- -Dosslsigncode
+override_dh_clean:
+	dh_clean -- -Dosslsigncode
 
 # get back current tag release notes from GitHub
 mkrelease:
@@ -40,5 +40,5 @@ mkrelease:
 	exit 1
 
 
-#%:
-#	dh $@  --with python --buildsystem=pybuild
+%:
+	dh $@
