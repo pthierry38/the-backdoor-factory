@@ -1,4 +1,4 @@
-backdoor-factory (3.4.2-1) unstable; urgency=medium
+backdoor-factory (3.4.2+dfsg-1) unstable; urgency=medium
 
   * Importing package from Kali.
     Using git sources 3.4.2-0kali1 from Devon Kearns and updated by
