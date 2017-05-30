@@ -3,8 +3,11 @@ Section: utils
 Priority: extra
 Maintainer: Debian Security Tools Packaging Team <pkg-security-team@lists.alioth.debian.org>
 Uploaders: Philippe Thierry <phil@reseau-libre.net>
-Build-Depends: debhelper (>= 10)
+Build-Depends:
+ debhelper (>= 10),
+ python (>= 2.7)
 Standards-Version: 3.9.8
+XS-Python-Version: >= 2.7
 Homepage: https://github.com/secretsquirrel/the-backdoor-factory
 Vcs-Git: https://anonscm.debian.org/git/pkg-security/backdoor-factory.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-security/backdoor-factory.git
