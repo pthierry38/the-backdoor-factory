@@ -1,14 +1,53 @@
 #!/usr/bin/make -f
-# -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-# This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+# testing target arch.
+export DEB_TARGET_ARCH = $(shell dpkg-architecture -qDEB_TARGET_ARCH)
 
-%:
-	dh $@ 
+# redirect module to correct dist-packages dir
+export PYBUILD_INSTALL_ARGS=--install-lib=/usr/lib/python2/dist-packages
 
+override_dh_install:
+	dh_install -O--buildsystem=pybuild
+
+override_dh_auto_configure:
+	dh_auto_configure -- -Dosslsigncode
+
+override_dh_auto_build:
+	dh_auto_build -- -Dosslsigncode
+
+override_dh_auto_test:
+	dh_auto_test -- -Dosslsigncode
+
+override_dh_auto_install:
+	dh_auto_install -- -Dosslsigncode
+
+override_dh_auto_clean:
+	dh_auto_clean -- -Dosslsigncode
+
+# for x86/x86_64 arch only
+ifeq ($(shell test "$(DEB_TARGET_ARCH)" = "amd64" -o "$(DEB_TARGET_ARCH)" = "i386" && printf true), true)
+
+		sudo apt-get install libc6-dev-i386
+                cd ./aPLib/example/
+                gcc -c -I../lib/elf -m32 -Wall -O2 -s -o appack.o appack.c -v 
+                gcc -m32 -Wall -O2 -s -o appack appack.o ../lib/elf/aplib.a -v 
+                sudo cp ./appack /usr/bin/appack        
+endif
+# get back current tag release notes from GitHub
+mkrelease:
+	quilt push changelog.patch
+	debian/lib/release.py
+	dos2unix changelog
+	quilt refresh
+	quilt pop -a
+	@echo
+	@echo This target is made to fail intentionally, to make sure
+	@echo that it is NEVER run during the automated build. Please
+	@echo ignore the following error, the changelog file has been
+	@echo generated SUCCESSFULLY.
+	@echo
+	exit 1
+
+
+#%:
+#	dh $@  --with python --buildsystem=pybuild

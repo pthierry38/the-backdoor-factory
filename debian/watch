@@ -1,2 +1,3 @@
 version=3
-https://github.com/secretsquirrel/the-backdoor-factory/tags .*/v?(.*)\.tar\.gz
+https://github.com/secretsquirrel/the-backdoor-factory/tags .*/v?(.*)\.tar\.gz \
+ debian debian/orig-tar.sh

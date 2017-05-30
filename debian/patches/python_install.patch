@@ -1,0 +1,42 @@
+--- /dev/null
++++ b/setup.py
+@@ -0,0 +1,39 @@
++#!/usr/bin/python
++#
++# Authors:
++#   Philippe Thierry <phil@reseau-libre.net>
++
++import os
++import os.path
++
++from distutils.core import setup
++
++
++def get_packages():
++    # Distutils requires us to list all packages, this is very tedious and prone
++    # to errors. This method crawls the hierarchy and gathers all packages.
++
++    ret = ["openscap_daemon"]
++
++    for dirpath, _, files in os.walk("openscap_daemon"):
++        if "__init__.py" in files:
++            ret.append(dirpath.replace(os.path.sep, "."))
++
++    return ret
++
++
++setup(
++    name="backdoor-factory",
++    version=version.VERSION_STRING,
++    author="Philippe Thierry",
++    author_email="phil@reseau-libre.net",
++    description="...",
++    license="LGPL2.1+",
++    url="https://github.com/secretsquirrel/the-backdoor-factory",
++    packages=get_packages(),
++    scripts=[
++        os.path.join("./", "backdoor.py"),
++    ],
++    data_files=[
++    ],
++)

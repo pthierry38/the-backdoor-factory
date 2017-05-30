@@ -1,20 +1,25 @@
 Source: backdoor-factory
 Section: utils
 Priority: extra
-Maintainer: Devon Kearns <dookie@kali.org>
-Build-Depends: debhelper (>= 9)
-Standards-Version: 3.9.6
+Maintainer: Debian Security Tools Packaging Team <pkg-security-team@lists.alioth.debian.org>
+Uploaders: Philippe Thierry <phil@reseau-libre.net>
+Build-Depends: debhelper (>= 10)
+Standards-Version: 3.9.8
+Build-Depends:
+  libc6-dev-i386 [amd64],
 Homepage: https://github.com/secretsquirrel/the-backdoor-factory
-Vcs-Git: git://git.kali.org/packages/backdoor-factory.git
-Vcs-Browser: http://git.kali.org/gitweb?p=collab-maint/backdoor-factory.git;a=summary
+Vcs-Git: https://anonscm.debian.org/git/pkg-security/backdoor-factory.git
+Vcs-Browser: https://anonscm.debian.org/cgit/pkg-security/backdoor-factory.git
 
 Package: backdoor-factory
 Architecture: all
-Depends: ${misc:Depends},
-         python,
-         python-capstone (>= 3.0),
-         python-pefile,
-         osslsigncode
+Depends:
+  ${misc:Depends},
+  python,
+  python-capstone (>= 3.0),
+  python-pefile,
+  curl,
+  osslsigncode
 Description: Patch win32/64 binaries with shellcode
  Injects shellcode into win32/64 PE files, to continue normal file execution (if 
  the shellcode supports it), by patching the exe/dll directly.
