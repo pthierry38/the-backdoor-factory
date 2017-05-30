@@ -5,8 +5,6 @@ Maintainer: Debian Security Tools Packaging Team <pkg-security-team@lists.alioth
 Uploaders: Philippe Thierry <phil@reseau-libre.net>
 Build-Depends: debhelper (>= 10)
 Standards-Version: 3.9.8
-Build-Depends:
-  libc6-dev-i386 [amd64],
 Homepage: https://github.com/secretsquirrel/the-backdoor-factory
 Vcs-Git: https://anonscm.debian.org/git/pkg-security/backdoor-factory.git
 Vcs-Browser: https://anonscm.debian.org/cgit/pkg-security/backdoor-factory.git
