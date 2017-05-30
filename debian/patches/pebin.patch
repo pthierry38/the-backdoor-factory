@@ -6,9 +6,9 @@ Last-Update: 2015-12-16
 This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
 --- a/pebin.py
 +++ b/pebin.py
-@@ -1758,6 +1758,14 @@ class pebin():
- 
-         self.binary.close()
+@@ -1918,6 +1918,14 @@
+                 print "[!!!!] Code Signing Failed check your certs [!!!!]" 
+                 print str(err).strip("\n")
  
 +        if self.ZERO_CERT is True:
 +            # cert was removed earlier
