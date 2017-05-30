@@ -24,15 +24,6 @@ override_dh_auto_install:
 override_dh_auto_clean:
 	dh_auto_clean -- -Dosslsigncode
 
-# for x86/x86_64 arch only
-ifeq ($(shell test "$(DEB_TARGET_ARCH)" = "amd64" -o "$(DEB_TARGET_ARCH)" = "i386" && printf true), true)
-
-		sudo apt-get install libc6-dev-i386
-                cd ./aPLib/example/
-                gcc -c -I../lib/elf -m32 -Wall -O2 -s -o appack.o appack.c -v 
-                gcc -m32 -Wall -O2 -s -o appack appack.o ../lib/elf/aplib.a -v 
-                sudo cp ./appack /usr/bin/appack        
-endif
 # get back current tag release notes from GitHub
 mkrelease:
 	quilt push changelog.patch
