@@ -27,7 +27,7 @@
 +
 +setup(
 +    name="backdoor-factory",
-+    version=version.VERSION_STRING,
++    #version=version.VERSION_STRING,
 +    author="Philippe Thierry",
 +    author_email="phil@reseau-libre.net",
 +    description="...",
@@ -37,6 +37,6 @@
 +    scripts=[
 +        os.path.join("./", "backdoor.py"),
 +    ],
-+    data_files=[
-+    ],
++    #data_files=[
++    #],
 +)
