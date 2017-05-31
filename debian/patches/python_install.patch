@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/setup.py
-@@ -0,0 +1,39 @@
+@@ -0,0 +1,41 @@
 +#!/usr/bin/python
 +#
 +# Authors:
@@ -33,7 +33,9 @@
 +    description="...",
 +    license="LGPL2.1+",
 +    url="https://github.com/secretsquirrel/the-backdoor-factory",
-+    py_modules = ['backdoor_factory.pebin', 'backdoor_factory.elfbin', 'backdoor_factory.machobin'],
++    packages=['backdoor_factory'],
++    package_dir = {'backdoor_factory': ''},
++    #py_modules = ['backdoor_factory.pebin', 'backdoor_factory.elfbin', 'backdoor_factory.machobin'],
 +    scripts=[
 +        os.path.join("./", "backdoor.py"),
 +    ],
