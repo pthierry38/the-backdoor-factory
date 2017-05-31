@@ -4,6 +4,7 @@ Priority: extra
 Maintainer: Debian Security Tools Packaging Team <pkg-security-team@lists.alioth.debian.org>
 Uploaders: Philippe Thierry <phil@reseau-libre.net>
 Build-Depends:
+ libgsf-1-dev,
  debhelper (>= 10),
  python (>= 2.7)
 Standards-Version: 3.9.8
@@ -16,6 +17,7 @@ Package: backdoor-factory
 Architecture: all
 Depends:
   ${misc:Depends},
+  libgsf-1-114,
   python,
   python-capstone (>= 3.0),
   python-pefile,
