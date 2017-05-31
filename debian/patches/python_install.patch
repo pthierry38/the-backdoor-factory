@@ -33,8 +33,8 @@
 +    description="...",
 +    license="LGPL2.1+",
 +    url="https://github.com/secretsquirrel/the-backdoor-factory",
-+    packages=['backdoor_factory','intel','arm','winapi','onionduke','preprocessor'],
-+    package_dir = {'backdoor_factory': ''},
++    packages=['intel','arm','winapi','onionduke','preprocessor'],
++    py_modules=['pebin','elfbin','machobin'],
 +    scripts=[
 +        os.path.join("./", "backdoor.py"),
 +    ],
