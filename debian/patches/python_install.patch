@@ -33,7 +33,7 @@
 +    description="...",
 +    license="LGPL2.1+",
 +    url="https://github.com/secretsquirrel/the-backdoor-factory",
-+    packages=get_packages(),
++    py_modules = ['backdoor_factory.pebin', 'backdoor_factory.elfbin', 'backdoor_factory.machobin']
 +    scripts=[
 +        os.path.join("./", "backdoor.py"),
 +    ],
