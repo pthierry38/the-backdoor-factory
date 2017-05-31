@@ -16,9 +16,9 @@
 +    # Distutils requires us to list all packages, this is very tedious and prone
 +    # to errors. This method crawls the hierarchy and gathers all packages.
 +
-+    ret = ["openscap_daemon"]
++    ret = ["backdoor_factory"]
 +
-+    for dirpath, _, files in os.walk("openscap_daemon"):
++    for dirpath, _, files in os.walk("backdoor_factory"):
 +        if "__init__.py" in files:
 +            ret.append(dirpath.replace(os.path.sep, "."))
 +
@@ -26,7 +26,7 @@
 +
 +
 +setup(
-+    name="backdoor-factory",
++    name="backdoor_factory",
 +    #version=version.VERSION_STRING,
 +    author="Philippe Thierry",
 +    author_email="phil@reseau-libre.net",
