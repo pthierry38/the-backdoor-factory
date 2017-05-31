@@ -11,7 +11,7 @@ override_dh_auto_install:
 #	dh_install -O--buildsystem=pybuild
 
 override_dh_auto_configure:
-	$(shell cd $(CURDIR)/osslsigncode && ./autogen.sh)
+	$(shell cd $(CURDIR)/osslsigncode && ./autogen.sh 2>&1 > /dev/null)
 	dh_auto_configure --sourcedirectory=./osslsigncode
 
 override_dh_auto_build:
@@ -19,9 +19,6 @@ override_dh_auto_build:
 
 override_dh_auto_test:
 	dh_auto_test --sourcedirectory=./osslsigncode
-
-override_dh_auto_install:
-	dh_auto_install --sourcedirectory=./osslsigncode
 
 override_dh_auto_clean:
 	dh_auto_clean --sourcedirectory=./osslsigncode

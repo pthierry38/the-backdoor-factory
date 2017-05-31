@@ -1,0 +1,12 @@
+--- a/osslsigncode/autogen.sh
++++ b/osslsigncode/autogen.sh
+@@ -280,9 +280,6 @@
+ if [ "x$AUTORECONF_OPTIONS" = "x" ] ; then
+     AUTORECONF_OPTIONS="-i -f"
+ fi
+-if [ "x$AUTOCONF_OPTIONS" = "x" ] ; then
+-    AUTOCONF_OPTIONS="-f"
+-fi
+ if [ "x$AUTOMAKE_OPTIONS" = "x" ] ; then
+     AUTOMAKE_OPTIONS="-a -c -f"
+ fi
