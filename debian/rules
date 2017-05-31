@@ -6,23 +6,25 @@ export DEB_TARGET_ARCH = $(shell dpkg-architecture -qDEB_TARGET_ARCH)
 # redirect module to correct dist-packages dir
 #export PYBUILD_INSTALL_ARGS=--install-lib=/usr/lib/python2/dist-packages
 
-#override_dh_install:
+override_dh_auto_install:
+	dh_auto_install --sourcedirectory=./osslsigncode
 #	dh_install -O--buildsystem=pybuild
 
-#override_dh_auto_configure:
-#	dh_auto_configure -- -Dosslsigncode
+override_dh_auto_configure:
+	$(shell cd $(CURDIR)/osslsigncode && ./autogen.sh)
+	dh_auto_configure --sourcedirectory=./osslsigncode
 
-#override_dh_auto_build:
-#	dh_auto_build -- -Dosslsigncode
+override_dh_auto_build:
+	dh_auto_build --sourcedirectory=i./osslsigncode
 
-#override_dh_auto_test:
-#	dh_auto_test -- -Dosslsigncode
+override_dh_auto_test:
+	dh_auto_test --sourcedirectory=./osslsigncode
 
-#override_dh_auto_install:
-#	dh_auto_install -- -Dosslsigncode
+override_dh_auto_install:
+	dh_auto_install --sourcedirectory=./osslsigncode
 
-#override_dh_clean:
-#	dh_clean -- -Dosslsigncode
+override_dh_auto_clean:
+	dh_auto_clean --sourcedirectory=./osslsigncode
 
 # get back current tag release notes from GitHub
 mkrelease:
