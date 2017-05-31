@@ -22,6 +22,7 @@ Package: backdoor-factory
 Architecture: all
 Depends:
   ${misc:Depends},
+  ${python:Depends},
   curl,
   libgsf-1-114,
   libssl1.0.0,
