@@ -5,23 +5,6 @@ export DEB_TARGET_ARCH = $(shell dpkg-architecture -qDEB_TARGET_ARCH)
 # redirect module to correct dist-packages dir
 export PYBUILD_INSTALL_ARGS=--install-lib=/usr/lib/python2.7/dist-packages
 
-#override_dh_auto_install:
-#	dh_auto_install --sourcedirectory=./osslsigncode
-#	dh_install -O--buildsystem=pybuild
-
-#override_dh_auto_configure:
-#	$(shell cd $(CURDIR)/osslsigncode && ./autogen.sh --quiet > /dev/null)
-#	dh_auto_configure --sourcedirectory=./osslsigncode
-
-#override_dh_auto_build:
-#	dh_auto_build --sourcedirectory=./osslsigncode
-
-#override_dh_auto_test:
-#	dh_auto_test --sourcedirectory=./osslsigncode
-
-#override_dh_auto_clean:
-#	dh_auto_clean --sourcedirectory=./osslsigncode
-
 # get back current tag release notes from GitHub
 mkrelease:
 	quilt push changelog.patch
@@ -37,6 +20,9 @@ mkrelease:
 	@echo
 	exit 1
 
+override_dh_auto_install:
+	dh_auto_install
+	mv $(CURDIR)/debian/backdoor-factory/usr/bin/backdoor.py $(CURDIR)/debian/backdoor-factory/usr/bin/backdoor-factory
 
 %:
 	dh $@ --with python2 --buildsystem=pybuild

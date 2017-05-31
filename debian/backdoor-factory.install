@@ -1,10 +1,3 @@
-backdoor.py /usr/bin/backdoor
-elfbin.py usr/share/backdoor-factory/
-__init__.py usr/share/backdoor-factory/
-machobin.py usr/share/backdoor-factory/
-payloadtests.py usr/share/backdoor-factory/
-pebin.py usr/share/backdoor-factory/
-*.py usr/share/backdoor-factory/
 arm usr/share/backdoor-factory/
 asm usr/share/backdoor-factory/
 intel usr/share/backdoor-factory/
