@@ -26,11 +26,10 @@ Depends:
   ${python:Depends},
   curl,
   libgsf-1-114,
-  libssl1.0.0,
+  libssl1.1,
   python,
   python-capstone (>= 3.0),
   python-pefile,
-  curl,
   osslsigncode
 Description: Patch win32/64 binaries with shellcode
  Injects shellcode into win32/64 PE files, to continue normal file execution (if 
