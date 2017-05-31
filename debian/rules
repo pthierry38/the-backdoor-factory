@@ -23,7 +23,7 @@ mkrelease:
 
 override_dh_auto_build:
 	dh_auto_build -O--buildsystem=pybuild
-	$(GO_MD2MAN) -in debian/backdoor-factory.1.md -out debian/backdoor-factory.1.tmp && touch backdoor-factory.1.tmp && mv debian/backdoot-factory.1.tmp backdoor-factory.1
+	go-md2man -in debian/backdoor-factory.1.md -out debian/backdoor-factory.1
 
 # using pybuild for install
 # backdoor.py is properly named backdoor-factory
