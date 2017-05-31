@@ -20,10 +20,14 @@ mkrelease:
 	@echo
 	exit 1
 
+# using pybuild for install
+# backdoor.py is properly named backdoor-factory
+# pyc and egg-info files are cleaned
 override_dh_install:
 	dh_install -O--buildsystem=pybuild
 	mv $(CURDIR)/debian/backdoor-factory/usr/bin/backdoor.py $(CURDIR)/debian/backdoor-factory/usr/bin/backdoor-factory
 	rm $(CURDIR)/debian/backdoor-factory/usr/lib/python2.7/dist-packages/backdoor_factory/*.pyc
+	rm $(CURDIR)/debian/backdoor-factory/usr/lib/python2.7/dist-packages/backdoor_factory*.egg-info
 
 %:
 	dh $@ --with python2 --buildsystem=pybuild
