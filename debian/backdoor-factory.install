@@ -1,8 +1,3 @@
-arm usr/share/backdoor-factory/
 asm usr/share/backdoor-factory/
-intel usr/share/backdoor-factory/
-onionduke usr/share/backdoor-factory/
-preprocessor usr/share/backdoor-factory/
-winapi usr/share/backdoor-factory/
 debian/certs usr/share/backdoor-factory/
 debian/helper-script/* usr/bin/
