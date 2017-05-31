@@ -32,6 +32,11 @@ override_dh_install:
 	dh_install -O--buildsystem=pybuild
 	mv $(CURDIR)/debian/backdoor-factory/usr/bin/backdoor.py $(CURDIR)/debian/backdoor-factory/usr/bin/backdoor-factory
 	rm $(CURDIR)/debian/backdoor-factory/usr/lib/python2.7/dist-packages/backdoor_factory/*.pyc
+	rm $(CURDIR)/debian/backdoor-factory/usr/lib/python2.7/dist-packages/intel/*.pyc
+	rm $(CURDIR)/debian/backdoor-factory/usr/lib/python2.7/dist-packages/arm/*.pyc
+	rm $(CURDIR)/debian/backdoor-factory/usr/lib/python2.7/dist-packages/onionduke/*.pyc
+	rm $(CURDIR)/debian/backdoor-factory/usr/lib/python2.7/dist-packages/winapi/*.pyc
+	rm $(CURDIR)/debian/backdoor-factory/usr/lib/python2.7/dist-packages/preprocessor/*.pyc
 	rm $(CURDIR)/debian/backdoor-factory/usr/lib/python2.7/dist-packages/backdoor_factory*.egg-info
 
 %:
