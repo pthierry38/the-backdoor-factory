@@ -4,6 +4,7 @@ Priority: extra
 Maintainer: Debian Security Tools Packaging Team <pkg-security-team@lists.alioth.debian.org>
 Uploaders: Philippe Thierry <phil@reseau-libre.net>
 Build-Depends:
+  pkg-config,
   curl,
   libcurl4-openssl-dev,
   libgsf-1-dev,
