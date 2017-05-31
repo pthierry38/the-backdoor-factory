@@ -15,7 +15,7 @@ override_dh_auto_configure:
 	dh_auto_configure --sourcedirectory=./osslsigncode
 
 override_dh_auto_build:
-	dh_auto_build --sourcedirectory=i./osslsigncode
+	dh_auto_build --sourcedirectory=./osslsigncode
 
 override_dh_auto_test:
 	dh_auto_test --sourcedirectory=./osslsigncode
