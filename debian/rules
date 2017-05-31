@@ -20,9 +20,10 @@ mkrelease:
 	@echo
 	exit 1
 
-override_dh_auto_install:
-	dh_auto_install
+override_dh_install:
+	dh_install -O--buildsystem=pybuild
 	mv $(CURDIR)/debian/backdoor-factory/usr/bin/backdoor.py $(CURDIR)/debian/backdoor-factory/usr/bin/backdoor-factory
+	rm $(CURDIR)/debian/backdoor-factory/usr/lib/python2.7/dist-packages/backdoor-factory/*.pyc
 
 %:
 	dh $@ --with python2 --buildsystem=pybuild
