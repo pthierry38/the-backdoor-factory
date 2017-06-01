@@ -8,7 +8,7 @@ export PYBUILD_INSTALL_ARGS=--install-lib=/usr/lib/python2.7/dist-packages
 # get back current tag release notes from GitHub
 mkrelease:
 	quilt push changelog.patch
-	debian/lib/release.py
+	debian/lib/gen_changelog.sh
 	dos2unix changelog
 	quilt refresh
 	quilt pop -a
