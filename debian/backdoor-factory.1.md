@@ -129,7 +129,7 @@ Binaries such as ssh may not be caved correctly, as binaries such as dolphin
 
 # ABOUT THE SHELLCODES
 
-There is various predefined shellcode in backdoor-factory. Their availability depends on the target type (ELF32, ELF64, PE32...). The shellcodes list is defined bellow.
+There is various predefined shellcode in backdoor-factory. Their availability depends on the target type (ELF32, ELF64, PE32...). The shellcodes list is defined below.
 
 ## for all intel-based (x86 and x86_64 architecture)
 
