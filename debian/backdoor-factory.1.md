@@ -9,12 +9,21 @@ backdoor-factory - inject predefined or user-defined shellcode in binaries
 
 
 # DESCRIPTION
+
 **backdoor-factory** patch executable binaries with user desired
 shellcode and continue normal execution of the prepatched state.
 
 This tool is for security professionals and researchers only.
 
+This tool doesn't support relocatable ELF executable (i.e. compiled with
+the -fPIE option, suggested by the Debian hardening requirements,
+see `https://wiki.debian.org/Hardening`)
+
+Binaries such as ssh may not be caved correctly, as binaries such as dolphin
+(at the time of this man page is written) are.
+
 # OPTIONS:
+
 **-h**, **--help**
   show this help message and exit
 
@@ -46,7 +55,7 @@ This tool is for security professionals and researchers only.
   For use with -c to help find code caves of different sizes
 
 **-o OUTPUT**, **--output-file=OUTPUT**
-  The backdoor output file
+  The backdoor output file path. Parent dir(s) must exist
 
 **-n NSECTION**, **--section=NSECTION**
   New section name must be less than seven characters
@@ -118,27 +127,27 @@ This tool is for security professionals and researchers only.
 **-p**, **--preprocess**
   To execute preprocessing scripts in the preprocess directory
 
-# TITLE TO DEFINE
+# ABOUT THE SHELLCODES
 
-List of Intel shellcodes (by name)
+There is various predefined shellcode in backdoor-factory. Their availability depends on the target type (ELF32, ELF64, PE32...). The shellcodes list is defined bellow.
 
 ## for all intel-based (x86 and x86_64 architecture)
 
 **reverse_shell_tcp**
-  need:
+  need: a remote host and port to be set
   permits: remote shell access
 
 **delay_reverse_shell_tcp**
-  need:
-  permits:
+  need: a remote host and port to be set
+  permits: remote shell access
 
 **beaconing_reverse_shell_tcp**
-  need:
-  permits:
+  need: a beacon, a remote host and port to be set
+  permits: remote shell access
 
 **user_supplied_shellcode**
-  need:
-  permits:
+  need: a user-defined shellcode ready to inject
+  permits: depend on the shellcode
 
 ## Linux specific shellcodes
 
@@ -149,54 +158,54 @@ List of Intel shellcodes (by name)
 ## Windows PE32 exe shellcodes
 
 **reverse_shell_tcp_inline**
-  needs:
-  permits:
+  needs: a remote host and port to be set
+  permits: remote shell access
 
 **reverse_shell_tcp_stager_threaded**
-  needs:
-  permits:
+  needs: a remote host and port to be set
+  permits: Inject the meterpreter server DLL via the Reflective Dll Injection payload
 
 **meterpreter_reverse_https_threaded**
-  needs:
-  permits:
+  needs: a remote host and port to be set
+  permits: meterpreter over https transport
 
 **user_applied_shellcode_threaded**
-  needs:
-  permits:
+  needs: a user-defined shellcode ready to inject
+  permits: depend on the shellcode
 
 **iat_reverse_tcp_inline**
-  needs:
+  needs: a remote host and port to be set
   permits:
 
 **iat_reverse_tcp_inline_threaded**
-  needs:
+  needs: a remote host and port to be set
   permits:
 
 **iat_reverse_tcp_stager_threaded**
-  needs:
-  permits:
+  needs: a remote host and port to be set
+  permits: Inject the meterpreter server DLL via the Reflective Dll Injection payload
 
 **iat_user_applied_shellcode_threaded**
-  needs:
-  permits:
+  needs: a user-defined shellcode ready to inject
+  permits: depend on the shellcode
 
 ## Windows PE64 exe shellcodes
 
 **delay_reverse_shell_tcp**
-  needs:
-  permits:
+  needs: a remote host and port to be set
+  permits: remote shell access
 
 **reverse_shell_tcp**
-  needs:
-  permits:
+  needs: a remote host and port to be set
+  permits: remote shell access
 
 **beaconing_reverse_shell_tcp**
-  needs:
-  permits:
+  needs:a beacon, a remote host and port to be set 
+  permits: remote shell access
 
 **user_supplied_shellcode**
-  needs:
-  permits:
+  needs: a user-defined shellcode ready to inject
+  permits: depend on the shellcode
 
 # EXAMPLES
 
