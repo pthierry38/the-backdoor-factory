@@ -8,10 +8,7 @@ Build-Depends:
   dh-python,
   pkg-config,
   curl,
-  libcurl4-openssl-dev,
-  libgsf-1-dev,
   debhelper (>= 10),
-  libssl-dev,
   python (>= 2.7)
 Standards-Version: 3.9.8
 XS-Python-Version: >= 2.7
@@ -25,8 +22,6 @@ Depends:
   ${misc:Depends},
   ${python:Depends},
   curl,
-  libgsf-1-114,
-  libssl1.1,
   python,
   python-capstone (>= 3.0),
   python-pefile,
