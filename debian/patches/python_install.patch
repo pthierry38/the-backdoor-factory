@@ -1,3 +1,9 @@
+Description: Add support for clean python install mode
+ Python build and install mechanism based on setup.py
+ and pybuild.
+ Permit a clean install through dh-python2
+Author: Philippe Thierry
+Last-Update: 2017-05-31
 --- /dev/null
 +++ b/setup.py
 @@ -0,0 +1,40 @@
