@@ -1,0 +1,55 @@
+Description: Support cleaner output file target
+ This permits to write output file in other directory
+ than current backdoored/ prefixed dir (e.g. in /tmp/).
+ This patch doesn't create parent directories of the file
+ given in argument.
+Author: Philippe Thierry
+Last-Update: 2017-06-01
+--- a/elfbin.py
++++ b/elfbin.py
+@@ -664,13 +664,16 @@
+             print "True"
+             self.preprocess()
+ 
+-        if not os.path.exists("backdoored"):
+-            os.makedirs("backdoored")
+-        os_name = os.name
+-        if os_name == 'nt':
+-            self.backdoorfile = "backdoored\\" + self.OUTPUT
++        if self.OUTPUT == None:
++            if not os.path.exists("backdoored"):
++                os.makedirs("backdoored")
++            os_name = os.name
++            if os_name == 'nt':
++                self.backdoorfile = "backdoored\\" + self.OUTPUT
++            else:
++                self.backdoorfile = "backdoored/" + self.OUTPUT
+         else:
+-            self.backdoorfile = "backdoored/" + self.OUTPUT
++            self.backdoorfile = self.OUTPUT
+ 
+         shutil.copy2(self.FILE, self.backdoorfile)
+ 
+--- a/pebin.py
++++ b/pebin.py
+@@ -1694,12 +1694,14 @@
+ 
+         if self.INJECTOR is False:
+             os_name = os.name
+-            if not os.path.exists("backdoored"):
+-                os.makedirs("backdoored")
+-            if os_name == 'nt':
+-                self.OUTPUT = "backdoored\\" + self.OUTPUT
+-            else:
+-                self.OUTPUT = "backdoored/" + self.OUTPUT
++            if self.OUTPUT == None:
++                if not os.path.exists("backdoored"):
++                    os.makedirs("backdoored")
++                if os_name == 'nt':
++                    self.OUTPUT = "backdoored\\" + self.OUTPUT
++                else:
++                    self.OUTPUT = "backdoored/" + self.OUTPUT
++
+ 
+         if self.PATCH_METHOD.lower() == 'replace':
+             print "[*] Using replace method, copying supplied binary"
