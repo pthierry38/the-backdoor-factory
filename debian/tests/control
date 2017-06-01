@@ -1,0 +1,7 @@
+Tests: ssh_bd_tcp_rst_sec.sh ssh_bd_tcp_rst.sh
+Restrictions: allow-stderr
+Depends: @, mktemp, openssh-client
+
+Tests: dolphin_bd_tcp_rst.sh
+Restrictions: allow-stderr
+Depends: @, mktemp, dolphin
